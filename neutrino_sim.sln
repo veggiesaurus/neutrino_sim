@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "neutrino_sim", "neutrino_sim.vcxproj", "{DE2F9DA1-49E5-4E71-843B-91EFA551FC6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE2F9DA1-49E5-4E71-843B-91EFA551FC6C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DE2F9DA1-49E5-4E71-843B-91EFA551FC6C}.Debug|Win32.Build.0 = Debug|Win32
+		{DE2F9DA1-49E5-4E71-843B-91EFA551FC6C}.Release|Win32.ActiveCfg = Release|Win32
+		{DE2F9DA1-49E5-4E71-843B-91EFA551FC6C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
