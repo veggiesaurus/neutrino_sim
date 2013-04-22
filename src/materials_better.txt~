@@ -1,0 +1,35 @@
+G4double a, z;
+  G4double density;
+  G4int ncomponents, natoms;
+  
+  //Elements
+  G4Element* H = new G4Element("Hydrogen", "H", z=1., a= 1.008*g/mole);
+  G4Element* C = new G4Element("Carbon"  , "C", z=6., a= 12.01*g/mole);
+  G4Element* B = new G4Element("Boron"  , "B", z=5., a= 10.81*g/mole);
+  G4Element* O = new G4Element("Oxygen", "O", z=8., a= 15.9994*g/mole);
+  G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.0067*g/mole);
+
+  //Polyvinyl tourine matrix
+  G4Material* PVT = new G4Material("PVT", density= 1032*mg/cm3, ncomponents=2, kStateSolid);
+  PVT->AddElement(H, 8.14*perCent);
+  PVT->AddElement(C, 91.86*perCent);
+
+  //PPO dye
+  G4Material* PPO = new G4Material("PPO", density= 1094*mg/cm3, ncomponents=4, kStateSolid);
+  PPO->AddElement(C, natoms=15);
+  PPO->AddElement(H, natoms=11);
+  PPO->AddElement(N, natoms=1);
+  PPO->AddElement(O, natoms=1);
+
+ //DPA dye
+  G4Material* DPA = new G4Material("DPA", density= 1220*mg/cm3, ncomponents=2, kStateSolid);
+  DPA->AddElement(C, natoms=26);
+  DPA->AddElement(H, natoms=18);
+  
+  //Natural boron doped (5%)
+  //Density is an estimate
+  G4Material* PVT_doped = new G4Material("EJ299-33-doped", density= 1130*mg/cm3, ncomponents=4, kStateSolid);
+  PVT_doped->AddMaterial(PVT, 69.8*perCent);
+  PVT_doped->AddMaterial(PPO, 25*perCent);
+  PVT_doped->AddMaterial(DPA, 0.2*perCent);
+  PVT_doped->AddElement(B, 5*perCent);

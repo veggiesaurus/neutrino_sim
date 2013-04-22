@@ -1,0 +1,18 @@
+ //------------------------------------------------------ materials
+
+  G4double a, z;
+  G4double density;
+  G4int ncomponents;
+  
+  G4Element* H = new G4Element("Hydrogen", "H", z=1., a= 1.008*g/mole);
+  G4Element* C = new G4Element("Carbon"  , "C", z=6., a= 12.01*g/mole);
+  G4Element* B = new G4Element("Boron"  , "B", z=5., a= 10.81*g/mole);
+  //Polyvinyl tourine matrix (this ignores the presence of N and O in the PPO and DPA dyes!)
+  G4Material* PVT = new G4Material("PVT", density= 1080*mg/cm3, ncomponents=2, kStateSolid);
+  PVT->AddElement(H, 8.14*perCent);
+  PVT->AddElement(C, 91.86*perCent);
+
+  //Natural boron doped (5%)
+  G4Material* PVT_doped = new G4Material("PVT", density= 1130*mg/cm3, ncomponents=2, kStateSolid);
+  PVT_doped->AddMaterial(PVT, 95*perCent);
+  PVT_doped->AddElement(B, 5*perCent);

@@ -1,0 +1,20 @@
+various energies:
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_100keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_90keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_80keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_70keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_50keV_1pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_40keV_1pc_b10_25k_events.txt
+
+various boron levels
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_2pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_3pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_4pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_5pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_6pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_7pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_8pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_9pc_b10_25k_events.txt
+./exampleN01 |grep alpha -A4 | grep "initStep" > neutron_paths_60keV_10pc_b10_25k_events.txt
+
