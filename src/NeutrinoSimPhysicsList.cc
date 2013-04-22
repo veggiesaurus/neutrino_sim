@@ -26,34 +26,44 @@
 //
 // $Id$
 //
+// 
 
-#ifndef ExN01PrimaryGeneratorAction_h
-#define ExN01PrimaryGeneratorAction_h 1
+#include "NeutrinoSimPhysicsList.hh"
+#include "G4ParticleTypes.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "Randomize.hh"
-#include "globals.hh"
 
-class G4ParticleGun;
-class G4Event;
+NeutrinoSimPhysicsList::NeutrinoSimPhysicsList()
+{;}
 
-class ExN01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+NeutrinoSimPhysicsList::~NeutrinoSimPhysicsList()
+{;}
+
+void NeutrinoSimPhysicsList::ConstructParticle()
 {
-  public:
-    ExN01PrimaryGeneratorAction();
-    ExN01PrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread);
-    ~ExN01PrimaryGeneratorAction();
+  // In this method, static member functions should be called
+  // for all particles which you want to use.
+  // This ensures that objects of these particle types will be
+  // created in the program. 
 
-  public:
-    void GeneratePrimaries(G4Event* anEvent);
+  G4Geantino::GeantinoDefinition();
+}
 
-  private:
-    G4ParticleGun* particleGunThermalNeutron;
-    G4double neutronEnergy, neutronEnergySpread;
-    G4ParticleGun* particleGunPositron;
-    G4double positronEnergy, positronEnergySpread;
-};
+void NeutrinoSimPhysicsList::ConstructProcess()
+{
+  // Define transportation process
 
-#endif
+  AddTransportation();
+}
 
+void NeutrinoSimPhysicsList::SetCuts()
+{
+  // uppress error messages even in case e/gamma/proton do not exist            
+  G4int temp = GetVerboseLevel();                                                SetVerboseLevel(0);                                                           
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
+
+  // Retrieve verbose level
+  SetVerboseLevel(temp);  
+}
 

@@ -1,4 +1,4 @@
-#include "ExN01DetectorConstruction.hh"
+#include "NeutrinoDetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -16,7 +16,7 @@
 #include "G4NistManager.hh"
 #include <vector>
 
-ExN01DetectorConstruction::ExN01DetectorConstruction(G4double s_boronLoading, G4double s_boronEnrichment, G4double s_hexRadius, G4double s_hexLength, G4int s_edgeCells)
+NeutrinoDetectorConstruction::NeutrinoDetectorConstruction(G4double s_boronLoading, G4double s_boronEnrichment, G4double s_hexRadius, G4double s_hexLength, G4int s_edgeCells)
  :  boronLoading(s_boronLoading), boronEnrichment(s_boronEnrichment),
     hexRadius(s_hexRadius), hexLength(s_hexLength), edgeCells(s_edgeCells),
     experimentalHall_log(0), tracker_log(0),
@@ -25,11 +25,11 @@ ExN01DetectorConstruction::ExN01DetectorConstruction(G4double s_boronLoading, G4
     calorimeterBlock_phys(0), tracker_phys(0)
 {;}
 
-ExN01DetectorConstruction::~ExN01DetectorConstruction()
+NeutrinoDetectorConstruction::~NeutrinoDetectorConstruction()
 {
 }
 
-G4VPhysicalVolume* ExN01DetectorConstruction::Construct()
+G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
 {
 
   //------------------------------------------------------ materials

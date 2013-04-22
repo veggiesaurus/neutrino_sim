@@ -64,20 +64,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="exampleN01.cc" />
-    <ClCompile Include="src\ExN01DetectorConstruction.cc" />
-    <ClCompile Include="src\ExN01PhysicsList.cc" />
-    <ClCompile Include="src\ExN01PrimaryGeneratorAction.cc" />
+    <ClCompile Include="neutrino.cc" />
+    <ClCompile Include="src\NeutrinoDetectorConstruction.cc" />
+    <ClCompile Include="src\NeutrinoSimPhysicsList.cc" />
+    <ClCompile Include="src\NeutrinoPrimaryGeneratorAction.cc" />
     <ClCompile Include="stats.cc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="exampleN01.in" />
-    <None Include="include\ExN01DetectorConstruction.hh" />
-    <None Include="include\ExN01PhysicsList.hh" />
-    <None Include="include\ExN01PrimaryGeneratorAction.hh" />
+    <None Include="neutrino.err" />
+    <None Include="neutrino.out" />
+    <None Include="neutrino.in" />
+    <None Include="include\NeutrinoDetectorConstruction.hh" />
+    <None Include="include\NeutrinoSimPhysicsList.hh" />
+    <None Include="include\NeutrinoPrimaryGeneratorAction.hh" />
     <None Include="README" />
     <None Include="simulate.sh" />
     <None Include="statProcess.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

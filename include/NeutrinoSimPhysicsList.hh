@@ -26,45 +26,43 @@
 //
 // $Id$
 //
+// 
+//
+// NeutrinoSimPhysicsList
+//  Construct/define particles and physics processes
+//
+//  Particle defined in ExampleN01
+//    geantino
+//
+//  Process defined in ExampleN01
+//    transportation
+//
 
-#ifndef ExN01DetectorConstruction_H
-#define ExN01DetectorConstruction_H 1
+#ifndef NeutrinoSimPhysicsList_h
+#define NeutrinoSimPhysicsList_h 1
 
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class ExN01DetectorConstruction : public G4VUserDetectorConstruction
+class NeutrinoSimPhysicsList: public G4VUserPhysicsList
 {
   public:
+    NeutrinoSimPhysicsList();
+    ~NeutrinoSimPhysicsList();
 
-    ExN01DetectorConstruction(G4double s_boronLoading, G4double s_boronEnrichment, G4double s_hexRadius, G4double s_hexLength, G4int s_edgeCells);
-    ~ExN01DetectorConstruction();
+  protected:
+    // Construct particle and physics process
+    void ConstructParticle();
+    void ConstructProcess();
+    void SetCuts();
 
-    G4VPhysicalVolume* Construct();
-
-  private:
-    //parameters
-    G4double boronLoading, boronEnrichment;
-    G4double hexRadius, hexLength;
-    G4int edgeCells;
-    
-    // Logical volumes
-    //
-    G4LogicalVolume* experimentalHall_log;
-    G4LogicalVolume* tracker_log;
-    G4LogicalVolume* calorimeterBlock_log;
-    G4LogicalVolume* calorimeterLayer_log;
-
-    // Physical volumes
-    //
-    G4VPhysicalVolume* experimentalHall_phys;
-    G4VPhysicalVolume* calorimeterLayer_phys;
-    G4VPhysicalVolume* calorimeterBlock_phys;
-    G4VPhysicalVolume* tracker_phys;
 };
 
 #endif
+
+
+
+
+
+
 

@@ -26,44 +26,45 @@
 //
 // $Id$
 //
-// 
 
-#include "ExN01PhysicsList.hh"
-#include "G4ParticleTypes.hh"
+#ifndef NeutrinoDetectorConstruction_H
+#define NeutrinoDetectorConstruction_H 1
 
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
-ExN01PhysicsList::ExN01PhysicsList()
-{;}
+#include "G4VUserDetectorConstruction.hh"
+#include "globals.hh"
 
-ExN01PhysicsList::~ExN01PhysicsList()
-{;}
-
-void ExN01PhysicsList::ConstructParticle()
+class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program. 
+  public:
 
-  G4Geantino::GeantinoDefinition();
-}
+    NeutrinoDetectorConstruction(G4double s_boronLoading, G4double s_boronEnrichment, G4double s_hexRadius, G4double s_hexLength, G4int s_edgeCells);
+    ~NeutrinoDetectorConstruction();
 
-void ExN01PhysicsList::ConstructProcess()
-{
-  // Define transportation process
+    G4VPhysicalVolume* Construct();
 
-  AddTransportation();
-}
+  private:
+    //parameters
+    G4double boronLoading, boronEnrichment;
+    G4double hexRadius, hexLength;
+    G4int edgeCells;
+    
+    // Logical volumes
+    //
+    G4LogicalVolume* experimentalHall_log;
+    G4LogicalVolume* tracker_log;
+    G4LogicalVolume* calorimeterBlock_log;
+    G4LogicalVolume* calorimeterLayer_log;
 
-void ExN01PhysicsList::SetCuts()
-{
-  // uppress error messages even in case e/gamma/proton do not exist            
-  G4int temp = GetVerboseLevel();                                                SetVerboseLevel(0);                                                           
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
+    // Physical volumes
+    //
+    G4VPhysicalVolume* experimentalHall_phys;
+    G4VPhysicalVolume* calorimeterLayer_phys;
+    G4VPhysicalVolume* calorimeterBlock_phys;
+    G4VPhysicalVolume* tracker_phys;
+};
 
-  // Retrieve verbose level
-  SetVerboseLevel(temp);  
-}
+#endif
 

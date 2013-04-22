@@ -26,43 +26,34 @@
 //
 // $Id$
 //
-// 
-//
-// ExN01PhysicsList
-//  Construct/define particles and physics processes
-//
-//  Particle defined in ExampleN01
-//    geantino
-//
-//  Process defined in ExampleN01
-//    transportation
-//
 
-#ifndef ExN01PhysicsList_h
-#define ExN01PhysicsList_h 1
+#ifndef NeutrinoPrimaryGeneratorAction_h
+#define NeutrinoPrimaryGeneratorAction_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "Randomize.hh"
 #include "globals.hh"
 
-class ExN01PhysicsList: public G4VUserPhysicsList
+class G4ParticleGun;
+class G4Event;
+
+class NeutrinoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    ExN01PhysicsList();
-    ~ExN01PhysicsList();
+    NeutrinoPrimaryGeneratorAction();
+    NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread);
+    ~NeutrinoPrimaryGeneratorAction();
 
-  protected:
-    // Construct particle and physics process
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
+  public:
+    void GeneratePrimaries(G4Event* anEvent);
 
+  private:
+    G4ParticleGun* particleGunThermalNeutron;
+    G4double neutronEnergy, neutronEnergySpread;
+    G4ParticleGun* particleGunPositron;
+    G4double positronEnergy, positronEnergySpread;
 };
 
 #endif
-
-
-
-
-
 
 

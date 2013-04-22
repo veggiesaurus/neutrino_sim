@@ -4,8 +4,8 @@
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "QGSP_BERT_HP.hh"
-#include "ExN01DetectorConstruction.hh"
-#include "ExN01PrimaryGeneratorAction.hh"
+#include "NeutrinoDetectorConstruction.hh"
+#include "NeutrinoPrimaryGeneratorAction.hh"
 
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
@@ -92,7 +92,7 @@ int main(int argc,char** argv)
 
   // set mandatory initialization classes
   //
-  G4VUserDetectorConstruction* detector = new ExN01DetectorConstruction(boronLoading/100.0, boronEnrichment, hexRadius, hexLength, edgeCells);
+  G4VUserDetectorConstruction* detector = new NeutrinoDetectorConstruction(boronLoading/100.0, boronEnrichment, hexRadius, hexLength, edgeCells);
   runManager->SetUserInitialization(detector);
   //
   G4VUserPhysicsList* physics = new QGSP_BERT_HP();
@@ -100,7 +100,7 @@ int main(int argc,char** argv)
 
   // set mandatory user action class
   //
-  G4VUserPrimaryGeneratorAction* gen_action = new ExN01PrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, positronEnergy, positronEnergySpread);
+  G4VUserPrimaryGeneratorAction* gen_action = new NeutrinoPrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, positronEnergy, positronEnergySpread);
   runManager->SetUserAction(gen_action);
 
   // Initialize G4 kernel

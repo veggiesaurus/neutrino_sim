@@ -1,4 +1,4 @@
-#include "ExN01PrimaryGeneratorAction.hh"
+#include "NeutrinoPrimaryGeneratorAction.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
@@ -7,7 +7,7 @@
 #include "G4SystemOfUnits.hh"
 
 //sets up a 4 MeV neutron gun at a position (-0,0,0)
-ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread)
+NeutrinoPrimaryGeneratorAction::NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread)
 {
   G4int n_particle = 1;
   G4String particleName;
@@ -27,14 +27,14 @@ ExN01PrimaryGeneratorAction::ExN01PrimaryGeneratorAction(G4double s_neutronEnerg
   
 }
 
-ExN01PrimaryGeneratorAction::~ExN01PrimaryGeneratorAction()
+NeutrinoPrimaryGeneratorAction::~NeutrinoPrimaryGeneratorAction()
 {
   delete particleGunPositron;
   delete particleGunThermalNeutron;
 }
 
 //generates primaries with slightly different directions (eventID used as seed)
-void ExN01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void NeutrinoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   double eventNeutronEnergy=neutronEnergy;
   if (neutronEnergySpread)
