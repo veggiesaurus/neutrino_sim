@@ -11,35 +11,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="exampleN01.cc">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="stats.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExN01DetectorConstruction.cc">
+    <ClCompile Include="neutrino.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExN01PhysicsList.cc">
+    <ClCompile Include="src\NeutrinoDetectorConstruction.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExN01PrimaryGeneratorAction.cc">
+    <ClCompile Include="src\NeutrinoPrimaryGeneratorAction.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NeutrinoSimPhysicsList.cc">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="simulate.sh" />
     <None Include="statProcess.sh" />
-    <None Include="include\ExN01DetectorConstruction.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\ExN01PhysicsList.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\ExN01PrimaryGeneratorAction.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="exampleN01.in" />
     <None Include="README" />
+    <None Include="neutrino.in" />
+    <None Include="include\NeutrinoDetectorConstruction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutrinoPrimaryGeneratorAction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutrinoSimPhysicsList.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="neutrino.err" />
+    <None Include="neutrino.out" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
 </Project>
