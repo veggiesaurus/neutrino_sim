@@ -1,5 +1,5 @@
 #include "NeutrinoDetectorConstruction.hh"
-
+#include "NeutrinoDetectorConstruction.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -8,6 +8,7 @@
 #include "G4TwoVector.hh"
 #include "G4VisAttributes.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4UserLimits.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4RotationMatrix.hh"
 #include "G4PVPlacement.hh"
@@ -19,14 +20,14 @@
 NeutrinoDetectorConstruction::NeutrinoDetectorConstruction(G4double s_boronLoading, G4double s_boronEnrichment, G4double s_hexRadius, G4double s_hexLength, G4int s_edgeCells)
  :  boronLoading(s_boronLoading), boronEnrichment(s_boronEnrichment),
     hexRadius(s_hexRadius), hexLength(s_hexLength), edgeCells(s_edgeCells),
-    experimentalHall_log(0), tracker_log(0),
-    calorimeterBlock_log(0), calorimeterLayer_log(0),
-    experimentalHall_phys(0), calorimeterLayer_phys(0),
-    calorimeterBlock_phys(0), tracker_phys(0)
+    experimentalHall_log(0), tracker_log(0),   
+    experimentalHall_phys(0), tracker_phys(0),
+	fStepLimit(0)
 {;}
 
 NeutrinoDetectorConstruction::~NeutrinoDetectorConstruction()
 {
+	delete fStepLimit;
 }
 
 G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
@@ -136,11 +137,18 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
              	tracker_log,volumeName,experimentalHall_log,false,index);
              	index++;
   	}  	
-  }
-  
-  
+  }  
   //------------------------------------------------------------------
 
+  G4double maxStep = 2.0*mm;
+  //fStepLimit = new G4UserLimits(maxStep);
+  //tracker_log->SetUserLimits(fStepLimit);
+  
   return experimentalHall_phys;
+}
+
+void NeutrinoDetectorConstruction::SetMaxStep(G4double maxStep)
+{
+  if ((fStepLimit)&&(maxStep>0.)) fStepLimit->SetMaxAllowedStep(maxStep);
 }
 

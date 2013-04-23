@@ -30,11 +30,15 @@
 #ifndef NeutrinoDetectorConstruction_H
 #define NeutrinoDetectorConstruction_H 1
 
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+
+
+class G4LogicalVolume;
+class G4VPhysicalVolume;
+class NeutrinoDetectorMessenger;
+class G4UserLimits;
+
 
 class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -44,6 +48,7 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
     ~NeutrinoDetectorConstruction();
 
     G4VPhysicalVolume* Construct();
+	void SetMaxStep (G4double );
 
   private:
     //parameters
@@ -55,15 +60,14 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
     //
     G4LogicalVolume* experimentalHall_log;
     G4LogicalVolume* tracker_log;
-    G4LogicalVolume* calorimeterBlock_log;
-    G4LogicalVolume* calorimeterLayer_log;
 
     // Physical volumes
     //
     G4VPhysicalVolume* experimentalHall_phys;
-    G4VPhysicalVolume* calorimeterLayer_phys;
-    G4VPhysicalVolume* calorimeterBlock_phys;
     G4VPhysicalVolume* tracker_phys;
+
+	G4UserLimits* fStepLimit;            // pointer to user step limits
+    NeutrinoDetectorMessenger*  fMessenger;   // messenger
 };
 
 #endif

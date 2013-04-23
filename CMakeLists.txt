@@ -3,11 +3,14 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(neutrinosim)
 
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_BUILD_TYPE Release)
+
 # Find boost
 set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON) 
 set(Boost_USE_STATIC_RUNTIME OFF)
-find_package(Boost 1.4.0 COMPONENTS program_options REQUIRED)
+find_package(Boost 1.4.0 COMPONENTS program_options iostreams REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -70,3 +73,4 @@ add_custom_target(neutrinosim DEPENDS neutrino)
 #
 install(TARGETS neutrino DESTINATION bin)
 
+set(CMAKE_BUILD_TYPE Release)

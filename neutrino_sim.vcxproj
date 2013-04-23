@@ -66,11 +66,17 @@
   <ItemGroup>
     <ClCompile Include="neutrino.cc" />
     <ClCompile Include="src\NeutrinoDetectorConstruction.cc" />
+    <ClCompile Include="src\NeutrinoDetectorMessenger.cc" />
+    <ClCompile Include="src\NeutrinoSimEventAction.cc" />
     <ClCompile Include="src\NeutrinoSimPhysicsList.cc" />
     <ClCompile Include="src\NeutrinoPrimaryGeneratorAction.cc" />
+    <ClCompile Include="src\NeutrinoSimTrackingAction.cc" />
     <ClCompile Include="stats.cc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="include\NeutrinoDetectorMessenger.hh" />
+    <None Include="include\NeutrinoSimEventAction.hh" />
+    <None Include="include\NeutrinoSimTrackingAction.hh" />
     <None Include="neutrino.err" />
     <None Include="neutrino.out" />
     <None Include="neutrino.in" />

@@ -26,6 +26,15 @@
     <ClCompile Include="src\NeutrinoSimPhysicsList.cc">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\NeutrinoDetectorMessenger.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NeutrinoSimEventAction.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NeutrinoSimTrackingAction.cc">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="simulate.sh" />
@@ -43,6 +52,15 @@
     </None>
     <None Include="neutrino.err" />
     <None Include="neutrino.out" />
+    <None Include="include\NeutrinoDetectorMessenger.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutrinoSimEventAction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutrinoSimTrackingAction.hh">
+      <Filter>include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />
