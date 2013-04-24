@@ -33,6 +33,7 @@
 
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
+#include "Randomize.hh"
 #include <fstream>
 
 using namespace std;
@@ -42,7 +43,7 @@ using namespace std;
 class NeutrinoSimTrackingAction : public G4UserTrackingAction
 {
   public:
-    NeutrinoSimTrackingAction(ofstream* s_verboseOut);
+    NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4double s_verticalResolution, bool s_outputRealistic);
     virtual ~NeutrinoSimTrackingAction();
 	void GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta);
     virtual void PostUserTrackingAction(const G4Track*);
@@ -52,6 +53,8 @@ private:
 	//reconstructions
 	G4double recSumTheta, recSumThetaSquared;
 	G4int  numAlphaTracks;
+	G4double verticalResolution;
+	bool outputRealistic;
 	ofstream* verboseOut;
 };
 

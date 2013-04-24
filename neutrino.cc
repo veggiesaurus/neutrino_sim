@@ -25,6 +25,8 @@ po::variables_map vm;
 G4int numberOfEvents, vis;
 string outputVerboseFile, outputStatisticsFile;
 bool appendStats, appendVerbose;
+bool outputRealistic;
+
 //incident energy
 G4double neutronEnergy, neutronEnergySpread; 
 G4double positronEnergy, positronEnergySpread;
@@ -34,6 +36,8 @@ G4double boronLoading, boronEnrichment;
 //detector geometry
 G4double hexRadius, hexLength;
 G4int edgeCells;
+//detector performance
+G4double verticalResolution;
 
 bool parseVariables(int argc, char* argv[])
 {
@@ -48,33 +52,25 @@ bool parseVariables(int argc, char* argv[])
 			("positronEnergy", po::value<G4double>(&positronEnergy)->default_value(10), "set incident positron energy (in keV)")
 			("positronEnergySpread", po::value<G4double>(&positronEnergySpread)->default_value(0), "set incident positron energy spread (in keV)")
 			("boronLoading", po::value<G4double>(&boronLoading)->default_value(5), "set percentage of boron in scintillator (0-100)")
-			("boronEnrichment", po::value<G4double>(&boronEnrichment)->default_value(19.9), "set percentage of B-10 enrichment of boron (0: All B-11; 100: All B-10)")
+			("boronEnrichment", po::value<G4double>(&boronEnrichment)->default_value(19.89f), "set percentage of B-10 enrichment of boron (0: All B-11; 100: All B-10)")
 			("hexRadius", po::value<G4double>(&hexRadius)->default_value(25), "set radius of hexagonal scintillator cell (in mm)")
 			("hexLength", po::value<G4double>(&hexLength)->default_value(300), "set length of hexagonal scintillator cell (in mm)")
 			("edgeCells", po::value<G4int>(&edgeCells)->default_value(3), "set number of hexagonal cells along each edge ")
+			("verticalResolution", po::value<G4double>(&verticalResolution)->default_value(21), "set sigma of vertical measurements (in mm)")
 			("outputVerboseFile", po::value<string>(&outputVerboseFile)->default_value(""), "set output file for each neutron capture position output")
 			("outputStatisticsFile", po::value<string>(&outputStatisticsFile)->default_value(""), "set output file for statistics output")
-			("appendStats", "append statistics output instead of overwriting")
+			("appendStats", "append statistics output instead of overwriting")			
 			("appendVerbose", "append verbose output instead of overwriting")
-
+			("outputRealistic", "output realistic reconstructions, taking into account finite resolution of detectors")
 			;
 
 		po::store(po::parse_command_line(argc, argv, desc), vm);
 		po::notify(vm);    
 
-		if (vm.count("appendStats"))
-		{
-			appendStats=true;
-		}
-		else
-			appendStats=false;
+		appendStats=vm.count("appendStats");		
+		appendVerbose=vm.count("appendVerbose");		
+		outputRealistic=vm.count("outputRealistic");		
 
-		if (vm.count("appendVerbose"))
-		{
-			appendVerbose=true;
-		}
-		else
-			appendVerbose=false;
 
 		if (vm.count("help")) {
 			cout << desc << "\n";
@@ -143,7 +139,7 @@ int main(int argc,char** argv)
 	runManager->SetUserAction(gen_action);
 	NeutrinoSimEventAction* event_action=new NeutrinoSimEventAction();
 	runManager->SetUserAction(event_action);
-	NeutrinoSimTrackingAction* tracking_action=new NeutrinoSimTrackingAction(verboseOut);
+	NeutrinoSimTrackingAction* tracking_action=new NeutrinoSimTrackingAction(verboseOut, verticalResolution, outputRealistic);
 	runManager->SetUserAction(tracking_action);
 
 	// Initialize G4 kernel

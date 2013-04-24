@@ -41,7 +41,7 @@ using boost::format;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-NeutrinoSimTrackingAction::NeutrinoSimTrackingAction(ofstream* s_verboseOut)
+NeutrinoSimTrackingAction::NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4double s_verticalResolution, bool s_outputRealistic)
 	: G4UserTrackingAction()
 {	
 	alphaSumX=0,alphaSumXSquared=0,alphaSumY=0, alphaSumYSquared=0, alphaSumZ=0, alphaSumZSquared=0;
@@ -49,6 +49,8 @@ NeutrinoSimTrackingAction::NeutrinoSimTrackingAction(ofstream* s_verboseOut)
 	recSumTheta=0, recSumThetaSquared=0;
 	numAlphaTracks=0;
 	verboseOut=s_verboseOut;
+	verticalResolution=s_verticalResolution;
+	outputRealistic=s_outputRealistic;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,18 +67,32 @@ void NeutrinoSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 	//alpha particle originating from primary neutron
 	if (track->GetParticleDefinition()==G4Alpha::Alpha() && track->GetParentID()==1)
 	{
-		G4ThreeVector pos=track->GetVertexPosition();		
-		alphaSumX+=pos.x();
-		alphaSumXSquared+=pos.x()*pos.x();
-		alphaSumY+=pos.y();
-		alphaSumYSquared+=pos.y()*pos.y();
-		alphaSumZ+=pos.z();
-		alphaSumZSquared+=pos.z()*pos.z();
+		G4ThreeVector pos=track->GetVertexPosition();
+		G4double x_f=pos.x();
+		G4double y_f=pos.y();
+		G4double z_f=pos.z();
+		G4double x_i=0;
+		G4double y_i=0;
+		G4double z_i=0;
 
-		G4double theta=atan2(pos.x(),pos.y());
+		//take into account the finite vertical resolution
+		if (outputRealistic)
+		{
+			y_i=G4RandGauss::shoot(y_i,verticalResolution*mm);
+			y_f=G4RandGauss::shoot(y_f,verticalResolution*mm);
+		}
+		alphaSumX+=x_f;
+		alphaSumXSquared+=x_f*x_f;
+		alphaSumY+=y_f;
+		alphaSumYSquared+=y_f*y_f;
+		alphaSumZ+=z_f;
+		alphaSumZSquared+=z_f*z_f;
+
+		//tan(theta)=dY/dX
+		G4double theta=atan2((x_f-x_i),(y_f-y_i));
 		if (verboseOut)
 		{
-			(*verboseOut)  << format("%9.4f  %9.4f  %9.4f  %9.4f") % pos.x() % pos.y() % pos.z() % theta<<endl;			
+			(*verboseOut)  << format("%9.4f  %9.4f  %9.4f  %9.4f") %x_f%y_f%z_f% theta<<endl;			
 		}
 
 		recSumTheta+=theta;
