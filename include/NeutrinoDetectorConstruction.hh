@@ -53,8 +53,8 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
 	void SetMaxStep (G4double );
 
   private:
-	void ConstructHexDetector();
-	void ConstructSquareDetector();
+	void ConstructHexDetector(G4Material* material);
+	void ConstructSquareDetector(G4Material* material);
 
     //parameters
     G4double boronLoading, boronEnrichment;
@@ -72,7 +72,7 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
     G4VPhysicalVolume* tracker_phys;
 
 	//Materials
-	G4Material* PVT, *PPO, *DPA, *PVT_doped;
+	G4Material* PVT, *PPO, *DPA, *PVT_doped, *BC454, *BC454_enr;
 
 	G4UserLimits* fStepLimit;            // pointer to user step limits
     NeutrinoDetectorMessenger*  fMessenger;   // messenger

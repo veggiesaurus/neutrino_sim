@@ -78,6 +78,28 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   G4NistManager* man = G4NistManager::Instance();
   G4Material* Air  = man->FindOrBuildMaterial("G4_AIR");
 
+
+
+  //BC454 material (from spec sheet)
+  //in units of molar mass * n/(10^20)
+  G4double wC=4.43*100*12.0107;
+  G4double wH=5.18*100*1.00794;
+  G4double wB=5.59*(100/19.9)*10.811;
+  G4double wTotal=wC+wH+wB;
+  BC454 = new G4Material("BC-454 5%", density= 1026*mg/cm3, ncomponents=3, kStateSolid);
+  BC454->AddElement(C, wC/wTotal);
+  BC454->AddElement(H, wH/wTotal);
+  BC454->AddElement(B, wB/wTotal);
+
+  BC454_enr = new G4Material("BC-454 5% enriched", density= 1026*mg/cm3, ncomponents=3, kStateSolid);
+  BC454_enr->AddElement(C, wC/wTotal);
+  BC454_enr->AddElement(H, wH/wTotal);
+  BC454_enr->AddElement(BoronEnriched, wB/wTotal);
+  
+
+
+
+
   //------------------------------------------------------ volumes
   
   //------------------------------ experimental hall (world volume)
@@ -93,10 +115,14 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   experimentalHall_log->SetVisAttributes (G4VisAttributes::Invisible);
   experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(), experimentalHall_log,"expHall",0,false,0);
   
-  //ConstructHexDetector();
-  ConstructSquareDetector();
- 
+
   //------------------------------------------------------------------
+  //Detector
+
+  //ConstructHexDetector(BC454);
+  ConstructSquareDetector(BC454_enr);
+ 
+  
 
   G4double maxStep = 2.0*mm;
   //fStepLimit = new G4UserLimits(maxStep);
@@ -105,7 +131,7 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   return experimentalHall_phys;
 }
 
-void NeutrinoDetectorConstruction::ConstructHexDetector()
+void NeutrinoDetectorConstruction::ConstructHexDetector(G4Material* material)
 {
 	//Hexagon
   
@@ -126,7 +152,7 @@ void NeutrinoDetectorConstruction::ConstructHexDetector()
   
   G4ExtrudedSolid* hexExtruded=new G4ExtrudedSolid("hex_extruded", hexPoints, hexLength/2.0, offset1, scale1, offset2, scale2);
 
-  tracker_log = new G4LogicalVolume(hexExtruded,PVT_doped,"tracker_log",0,0,0);
+  tracker_log = new G4LogicalVolume(hexExtruded,material,"tracker_log",0,0,0);
   G4double trackerPos_x = 0.*m;
   G4double trackerPos_y = 0.*m;
   G4double trackerPos_z = 0.*m;
@@ -153,7 +179,7 @@ void NeutrinoDetectorConstruction::ConstructHexDetector()
   }  
 }
 
-void NeutrinoDetectorConstruction::ConstructSquareDetector()
+void NeutrinoDetectorConstruction::ConstructSquareDetector(G4Material* material)
 {
 	//Square
   
@@ -174,7 +200,7 @@ void NeutrinoDetectorConstruction::ConstructSquareDetector()
   
   G4ExtrudedSolid* sqrExtruded=new G4ExtrudedSolid("sqr_extruded", squarePoints, hexLength/2.0, offset1, scale1, offset2, scale2);
 
-  tracker_log = new G4LogicalVolume(sqrExtruded,PVT_doped,"tracker_log",0,0,0);
+  tracker_log = new G4LogicalVolume(sqrExtruded,material,"tracker_log",0,0,0);
   G4double trackerPos_x = 0.*m;
   G4double trackerPos_y = 0.*m;
   G4double trackerPos_z = 0.*m;
