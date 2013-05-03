@@ -31,6 +31,7 @@
 #define NeutrinoDetectorConstruction_H 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Material.hh"
 #include "globals.hh"
 
 
@@ -48,9 +49,13 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
     ~NeutrinoDetectorConstruction();
 
     G4VPhysicalVolume* Construct();
+	
 	void SetMaxStep (G4double );
 
   private:
+	void ConstructHexDetector();
+	void ConstructSquareDetector();
+
     //parameters
     G4double boronLoading, boronEnrichment;
     G4double hexRadius, hexLength;
@@ -65,6 +70,9 @@ class NeutrinoDetectorConstruction : public G4VUserDetectorConstruction
     //
     G4VPhysicalVolume* experimentalHall_phys;
     G4VPhysicalVolume* tracker_phys;
+
+	//Materials
+	G4Material* PVT, *PPO, *DPA, *PVT_doped;
 
 	G4UserLimits* fStepLimit;            // pointer to user step limits
     NeutrinoDetectorMessenger*  fMessenger;   // messenger

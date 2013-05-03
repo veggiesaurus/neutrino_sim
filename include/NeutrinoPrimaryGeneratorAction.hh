@@ -41,7 +41,7 @@ class NeutrinoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     NeutrinoPrimaryGeneratorAction();
-    NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread);
+    NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread, G4double s_incidentAngle);
     ~NeutrinoPrimaryGeneratorAction();
 
   public:
@@ -52,6 +52,7 @@ class NeutrinoPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double neutronEnergy, neutronEnergySpread;
     G4ParticleGun* particleGunPositron;
     G4double positronEnergy, positronEnergySpread;
+	G4double incidentAngle;
 };
 
 #endif

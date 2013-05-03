@@ -32,6 +32,7 @@
 #define NeutrinoSimTrackingAction_h 1
 
 #include "G4UserTrackingAction.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 #include "Randomize.hh"
 #include <fstream>
@@ -46,15 +47,21 @@ class NeutrinoSimTrackingAction : public G4UserTrackingAction
     NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4double s_verticalResolution, bool s_outputRealistic);
     virtual ~NeutrinoSimTrackingAction();
 	void GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta);
-    virtual void PostUserTrackingAction(const G4Track*);
+	virtual void PreUserTrackingAction(const G4Track*);    
+	virtual void PostUserTrackingAction(const G4Track*);
 private:
+	//neutron initial positions
+	G4ThreeVector latestNeutronStartPosition;
+	G4ThreeVector latestNeutronStartVolumePosition;
 	//alpha positions
 	G4double alphaSumX, alphaSumXSquared, alphaSumY, alphaSumYSquared, alphaSumZ, alphaSumZSquared;
 	//reconstructions
 	G4double recSumTheta, recSumThetaSquared;
 	G4int  numAlphaTracks;
 	G4double verticalResolution;
+	
 	bool outputRealistic;
+	bool validTrack;
 	ofstream* verboseOut;
 };
 

@@ -62,7 +62,7 @@ void NeutrinoSimEventAction::BeginOfEventAction(const G4Event* event)
 void NeutrinoSimEventAction::EndOfEventAction(const G4Event* event)
 {  
   G4int eventID = event->GetEventID(); 
-  if (eventID %100==0)
+  if (eventID %10000==0)
 	G4cout << "---> End of event: " << eventID << G4endl;
 }  
 

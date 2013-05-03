@@ -86,6 +86,7 @@
     <None Include="README" />
     <None Include="simulate.sh" />
     <None Include="statProcess.sh" />
+    <None Include="vis.mac" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

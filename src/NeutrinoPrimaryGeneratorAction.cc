@@ -7,7 +7,7 @@
 #include "G4SystemOfUnits.hh"
 
 //sets up a 4 MeV neutron gun at a position (-0,0,0)
-NeutrinoPrimaryGeneratorAction::NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread)
+NeutrinoPrimaryGeneratorAction::NeutrinoPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread, G4double s_incidentAngle)
 {
   G4int n_particle = 1;
   G4String particleName;
@@ -17,13 +17,14 @@ NeutrinoPrimaryGeneratorAction::NeutrinoPrimaryGeneratorAction(G4double s_neutro
   particleGunThermalNeutron->SetParticleDefinition(particleTable->FindParticle(particleName="neutron"));
   neutronEnergy=s_neutronEnergy;
   neutronEnergySpread=s_neutronEnergySpread;
-  particleGunThermalNeutron->SetParticlePosition(G4ThreeVector(0.0*m, -0.0*m, 0.0));
+  
   
   particleGunPositron = new G4ParticleGun(n_particle);
   particleGunPositron->SetParticleDefinition(particleTable->FindParticle(particleName="e+"));
   positronEnergy=s_positronEnergy;
   positronEnergySpread=s_positronEnergySpread;
-  particleGunPositron->SetParticlePosition(G4ThreeVector(-0.0*m, 0.0, 0.0));
+
+  incidentAngle=s_incidentAngle;
   
 }
 
@@ -46,7 +47,13 @@ void NeutrinoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   	eventPositronEnergy=G4RandGauss::shoot(positronEnergy,positronEnergySpread);  
   particleGunPositron->SetParticleEnergy(eventPositronEnergy*keV);
   
-  G4ThreeVector v(0.0,1.0,0.0);
+  double vertexSpread=1*m;  
+  G4ThreeVector vertexPosition(G4RandFlat::shoot(-vertexSpread/2.0, vertexSpread/2.0), G4RandFlat::shoot(-vertexSpread/2.0, vertexSpread/2.0), G4RandFlat::shoot(-vertexSpread/2.0, vertexSpread/2.0));
+  particleGunThermalNeutron->SetParticlePosition(vertexPosition);
+  particleGunPositron->SetParticlePosition(vertexPosition);
+  
+  G4double angleInRadians=incidentAngle*pi/180.0;
+  G4ThreeVector v(sin(angleInRadians),cos(angleInRadians),0.0);
   particleGunThermalNeutron->SetParticleMomentumDirection(v);
   particleGunThermalNeutron->GeneratePrimaryVertex(anEvent);
   particleGunPositron->SetParticleMomentumDirection(v);

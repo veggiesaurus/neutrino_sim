@@ -61,6 +61,7 @@
     <None Include="include\NeutrinoSimTrackingAction.hh">
       <Filter>include</Filter>
     </None>
+    <None Include="vis.mac" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

@@ -1,6 +1,5 @@
 #include "NeutrinoDetectorConstruction.hh"
 #include "NeutrinoDetectorConstruction.hh"
-#include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -52,12 +51,12 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   G4Element* N = new G4Element("Nitrogen", "N", z=7., a= 14.0067*g/mole);
 
   //Polyvinyl tourine matrix
-  G4Material* PVT = new G4Material("PVT", density= 1032*mg/cm3, ncomponents=2, kStateSolid);
+  PVT = new G4Material("PVT", density= 1032*mg/cm3, ncomponents=2, kStateSolid);
   PVT->AddElement(H, 8.14*perCent);
   PVT->AddElement(C, 91.86*perCent);
 
   //PPO dye
-  G4Material* PPO = new G4Material("PPO", density= 1094*mg/cm3, ncomponents=4, kStateSolid);
+  PPO = new G4Material("PPO", density= 1094*mg/cm3, ncomponents=4, kStateSolid);
   PPO->AddElement(C, natoms=15);
   PPO->AddElement(H, natoms=11);
   PPO->AddElement(N, natoms=1);
@@ -70,7 +69,7 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   
   //Density is an estimate. 
   G4double estimatedDensity=(69.8*1032+0.2*1220+(30-boronLoading)*1094+boronLoading*2080)/100.0;
-  G4Material* PVT_doped = new G4Material("EJ299-33-doped", density= estimatedDensity*mg/cm3, ncomponents=4, kStateSolid);
+  PVT_doped = new G4Material("EJ299-33-doped", density= estimatedDensity*mg/cm3, ncomponents=4, kStateSolid);
   PVT_doped->AddMaterial(PVT, 69.8*perCent);
   PVT_doped->AddMaterial(PPO, (30-boronLoading)*perCent);
   PVT_doped->AddMaterial(DPA, 0.2*perCent);
@@ -85,16 +84,30 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
   //------------------------------ beam line along x axis
 
   G4double expHall_x = 1.0*m;
-  G4double expHall_y = 0.5*m;
-  G4double expHall_z = 0.5*m;
+  G4double expHall_y = 0.6*m;
+  G4double expHall_z = 0.6*m;
   G4Box* experimentalHall_box
     = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
   experimentalHall_log = new G4LogicalVolume(experimentalHall_box,
                                              Air,"expHall_log",0,0,0);
   experimentalHall_log->SetVisAttributes (G4VisAttributes::Invisible);
   experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(), experimentalHall_log,"expHall",0,false,0);
+  
+  //ConstructHexDetector();
+  ConstructSquareDetector();
+ 
+  //------------------------------------------------------------------
 
- //Hexagon
+  G4double maxStep = 2.0*mm;
+  //fStepLimit = new G4UserLimits(maxStep);
+  //tracker_log->SetUserLimits(fStepLimit);
+  
+  return experimentalHall_phys;
+}
+
+void NeutrinoDetectorConstruction::ConstructHexDetector()
+{
+	//Hexagon
   
   std::vector<G4TwoVector> hexPoints; 
   G4double centerX=0.*mm;
@@ -131,20 +144,60 @@ G4VPhysicalVolume* NeutrinoDetectorConstruction::Construct()
 
   		G4double rowOffset_x=(sqrt(3.0)/2.0*hexRadius*abs(i));
 		G4double rowOffset_z=(3.0/2.0*hexRadius*i);
+		G4ThreeVector totalOffset(trackerPos_x+rowOffset_x+(sqrt(3)*hexRadius*(j-edgeCells+1)),trackerPos_y, trackerPos_z+rowOffset_z);
   		sprintf(volumeName, "tracker_%d", index);
-  		tracker_phys = new G4PVPlacement(rm,
-             	G4ThreeVector(trackerPos_x+rowOffset_x+(sqrt(3)*hexRadius*(j-edgeCells+1)),trackerPos_y, trackerPos_z+rowOffset_z),
-             	tracker_log,volumeName,experimentalHall_log,false,index);
+		G4cout<<"Offsets: "<<totalOffset.x()<<" , 0 , " <<totalOffset.z()<<G4endl;
+  		tracker_phys = new G4PVPlacement(rm,totalOffset,tracker_log,volumeName,experimentalHall_log,false,index);
              	index++;
   	}  	
   }  
-  //------------------------------------------------------------------
+}
 
-  G4double maxStep = 2.0*mm;
-  //fStepLimit = new G4UserLimits(maxStep);
-  //tracker_log->SetUserLimits(fStepLimit);
+void NeutrinoDetectorConstruction::ConstructSquareDetector()
+{
+	//Square
   
-  return experimentalHall_phys;
+  std::vector<G4TwoVector> squarePoints; 
+  G4double centerX=0.*mm;
+  G4double centerY=0.*mm;  
+  for (int i=0;i<4;i++)
+  {
+  	//the minus is used in order to define the polygon clockwise, rather than counterclockwise
+  	G4double x=hexRadius*std::cos(-2*pi/4.0*i)+centerX;
+  	G4double y=hexRadius*std::sin(-2*pi/4.0*i)+centerY;
+  	G4TwoVector p(x,y);
+  	squarePoints.push_back(p);
+  }
+  
+  G4TwoVector offset1, offset2;
+  G4double scale1=1, scale2=1;
+  
+  G4ExtrudedSolid* sqrExtruded=new G4ExtrudedSolid("sqr_extruded", squarePoints, hexLength/2.0, offset1, scale1, offset2, scale2);
+
+  tracker_log = new G4LogicalVolume(sqrExtruded,PVT_doped,"tracker_log",0,0,0);
+  G4double trackerPos_x = 0.*m;
+  G4double trackerPos_y = 0.*m;
+  G4double trackerPos_z = 0.*m;
+  G4RotationMatrix* rm=new G4RotationMatrix();
+  rm->rotateX(pi/2.0);
+  rm->rotateZ(pi/4.0);
+  
+  G4int index=0;
+  char volumeName[24];
+  for (int i=-(edgeCells/2);i<=(edgeCells/2);i++)
+  {
+  	for (int j=-(edgeCells/2);j<=(edgeCells/2);j++)
+  	{
+
+  		G4double rowOffset_x=(hexRadius*i*sqrt(2));
+		G4double rowOffset_z=(hexRadius*j*sqrt(2));		
+		G4ThreeVector totalOffset(trackerPos_x+rowOffset_x,trackerPos_y, trackerPos_z+rowOffset_z);
+  		sprintf(volumeName, "tracker_%d", index);
+		G4cout<<"Offsets: "<<totalOffset.x()<<" , 0 , " <<totalOffset.z()<<G4endl;
+  		tracker_phys = new G4PVPlacement(rm,totalOffset,tracker_log,volumeName,experimentalHall_log,false,index);
+        index++;
+  	}  	
+  }  
 }
 
 void NeutrinoDetectorConstruction::SetMaxStep(G4double maxStep)

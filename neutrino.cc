@@ -27,10 +27,10 @@ string outputVerboseFile, outputStatisticsFile;
 bool appendStats, appendVerbose;
 bool outputRealistic;
 
-//incident energy
+//incident particles
 G4double neutronEnergy, neutronEnergySpread; 
 G4double positronEnergy, positronEnergySpread;
-
+G4double incidentAngle;
 //detector material
 G4double boronLoading, boronEnrichment;
 //detector geometry
@@ -51,6 +51,7 @@ bool parseVariables(int argc, char* argv[])
 			("neutronEnergySpread", po::value<G4double>(&neutronEnergySpread)->default_value(0), "set incident neutron energy spread (in keV)")
 			("positronEnergy", po::value<G4double>(&positronEnergy)->default_value(10), "set incident positron energy (in keV)")
 			("positronEnergySpread", po::value<G4double>(&positronEnergySpread)->default_value(0), "set incident positron energy spread (in keV)")
+			("incidentAngle", po::value<G4double>(&incidentAngle)->default_value(0), "set incident neutron angle in the x-y plane (in degrees. 0: along y axis; 90: along +ve x axis)")
 			("boronLoading", po::value<G4double>(&boronLoading)->default_value(5), "set percentage of boron in scintillator (0-100)")
 			("boronEnrichment", po::value<G4double>(&boronEnrichment)->default_value(19.89f), "set percentage of B-10 enrichment of boron (0: All B-11; 100: All B-10)")
 			("hexRadius", po::value<G4double>(&hexRadius)->default_value(25), "set radius of hexagonal scintillator cell (in mm)")
@@ -126,7 +127,7 @@ int main(int argc,char** argv)
 	// set mandatory initialization classes
 	//
 	NeutrinoDetectorConstruction* detector = new NeutrinoDetectorConstruction(boronLoading/100.0, boronEnrichment, hexRadius, hexLength, edgeCells);
-	detector->SetMaxStep(1.0*mm);
+	//detector->SetMaxStep(1.0*mm);
 	runManager->SetUserInitialization(detector);
 	//
 	G4VModularPhysicsList* physics = new QGSP_BERT_HP();
@@ -135,7 +136,7 @@ int main(int argc,char** argv)
 
 	// set mandatory user action class
 	//
-	G4VUserPrimaryGeneratorAction* gen_action = new NeutrinoPrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, positronEnergy, positronEnergySpread);
+	G4VUserPrimaryGeneratorAction* gen_action = new NeutrinoPrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, positronEnergy, positronEnergySpread, incidentAngle);
 	runManager->SetUserAction(gen_action);
 	NeutrinoSimEventAction* event_action=new NeutrinoSimEventAction();
 	runManager->SetUserAction(event_action);
@@ -144,6 +145,7 @@ int main(int argc,char** argv)
 
 	// Initialize G4 kernel
 	//
+	vis=0;
 	runManager->Initialize();
 	if (vis>1)
 	{
@@ -152,7 +154,7 @@ int main(int argc,char** argv)
 	}
 	G4UIExecutive * ui;
 	if (vis)  
-		G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+		ui = new G4UIExecutive(argc,argv);
 
 	// Get the pointer to the UI manager and set verbosities
 	//

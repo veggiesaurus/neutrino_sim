@@ -34,8 +34,10 @@
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
+#include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4Alpha.hh"
+#include "G4Neutron.hh"
 #include <boost/format.hpp>
 using boost::format;
 
@@ -51,6 +53,7 @@ NeutrinoSimTrackingAction::NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4d
 	verboseOut=s_verboseOut;
 	verticalResolution=s_verticalResolution;
 	outputRealistic=s_outputRealistic;
+	validTrack=false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,25 +65,61 @@ NeutrinoSimTrackingAction::~NeutrinoSimTrackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void NeutrinoSimTrackingAction::PreUserTrackingAction(const G4Track* track)
+{
+	//primary neutron
+	if (track->GetParticleDefinition()==G4Neutron::Neutron() && track->GetParentID()==0)
+	{
+		latestNeutronStartPosition=track->GetVertexPosition();;
+		latestNeutronStartVolumePosition=track->GetVolume()->GetTranslation();
+		
+		if (track->GetVolume()->GetMotherLogical()!=0)
+		{
+			//G4cout<<"Accepted: "<<track->GetVolume()->GetName()<<G4endl;
+			validTrack=true;
+		}
+		else
+		{
+			//G4cout<<"Rejected: "<<track->GetVolume()->GetName()<<G4endl;
+			//abandon track if it starts outside the detector
+			validTrack=false;
+			G4UImanager * UImanager = G4UImanager::GetUIpointer();
+			UImanager->ApplyCommand("/event/abort");
+		}
+		//G4cout<<"Initial Position: "<<latestNeutronStartPosition<<endl;
+		//G4cout<<"Initial Volume: "<<track->GetVolume()->GetName()<<": "<<track->GetVolume()->GetTranslation().x()<<endl;
+	}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void NeutrinoSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
-	//alpha particle originating from primary neutron
-	if (track->GetParticleDefinition()==G4Alpha::Alpha() && track->GetParentID()==1)
+	bool neutronFromCenterCell=(abs(latestNeutronStartVolumePosition.x())<0.001 && abs(latestNeutronStartVolumePosition.y()<0.001));
+	//alpha particle originating from primary neutron, validTrack means the neutron came from inside the detector volume
+	if (track->GetParticleDefinition()==G4Alpha::Alpha() && track->GetParentID()==1 && validTrack)
 	{
 		G4ThreeVector pos=track->GetVertexPosition();
 		G4double x_f=pos.x();
 		G4double y_f=pos.y();
 		G4double z_f=pos.z();
-		G4double x_i=0;
-		G4double y_i=0;
-		G4double z_i=0;
+		G4double x_i=latestNeutronStartPosition.x();
+		G4double y_i=latestNeutronStartPosition.y();
+		G4double z_i=latestNeutronStartPosition.z();
 
-		//take into account the finite vertical resolution
 		if (outputRealistic)
 		{
+			//take into account the finite vertical resolution
 			y_i=G4RandGauss::shoot(y_i,verticalResolution*mm);
 			y_f=G4RandGauss::shoot(y_f,verticalResolution*mm);
+
+			//in x, z direction, only know the initial and final cell
+			x_i=latestNeutronStartVolumePosition.x();
+			x_f=track->GetVolume()->GetTranslation().x();
+			z_i=latestNeutronStartVolumePosition.z();
+			z_f=track->GetVolume()->GetTranslation().z();
 		}
+
 		alphaSumX+=x_f;
 		alphaSumXSquared+=x_f*x_f;
 		alphaSumY+=y_f;
@@ -94,10 +133,13 @@ void NeutrinoSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 		{
 			(*verboseOut)  << format("%9.4f  %9.4f  %9.4f  %9.4f") %x_f%y_f%z_f% theta<<endl;			
 		}
-
+		//G4cout<<"Final Volume: "<<track->GetVolume()->GetName()<<": "<<track->GetVolume()->GetTranslation().x()<<endl;
 		recSumTheta+=theta;
 		recSumThetaSquared+=theta*theta;
 		numAlphaTracks++;
+		//reset track status
+		validTrack=false;
+
 	}
 
 }
