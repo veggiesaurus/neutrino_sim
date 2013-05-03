@@ -49,6 +49,7 @@ NeutrinoSimTrackingAction::NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4d
 	alphaSumX=0,alphaSumXSquared=0,alphaSumY=0, alphaSumYSquared=0, alphaSumZ=0, alphaSumZSquared=0;
 	//reconstructions
 	recSumTheta=0, recSumThetaSquared=0;
+	alphaSumT=0,alphaSumTSquared=0;
 	numAlphaTracks=0;
 	verboseOut=s_verboseOut;
 	verticalResolution=s_verticalResolution;
@@ -88,6 +89,17 @@ void NeutrinoSimTrackingAction::PreUserTrackingAction(const G4Track* track)
 		}
 		//G4cout<<"Initial Position: "<<latestNeutronStartPosition<<endl;
 		//G4cout<<"Initial Volume: "<<track->GetVolume()->GetName()<<": "<<track->GetVolume()->GetTranslation().x()<<endl;
+	}
+
+	//alpha particle originating from primary neutron,
+	if (track->GetParticleDefinition()==G4Alpha::Alpha() && track->GetParentID()==1)
+	{
+		//global time since start of neutron event
+		G4double t=track->GetGlobalTime();
+		//discard events where capture is too soon after neutron
+		//if (t<150)
+		//	validTrack=false;
+		//G4cout<<"Start time: "<<t<<" ns"<<endl;
 	}
 }
 
@@ -129,13 +141,24 @@ void NeutrinoSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 
 		//tan(theta)=dY/dX
 		G4double theta=atan2((x_f-x_i),(y_f-y_i));
-		if (verboseOut)
-		{
-			(*verboseOut)  << format("%9.4f  %9.4f  %9.4f  %9.4f") %x_f%y_f%z_f% theta<<endl;			
-		}
+		
+		
 		//G4cout<<"Final Volume: "<<track->GetVolume()->GetName()<<": "<<track->GetVolume()->GetTranslation().x()<<endl;
 		recSumTheta+=theta;
 		recSumThetaSquared+=theta*theta;
+
+		//global time since start of neutron event
+		G4double t=track->GetGlobalTime();
+		//G4cout<<"End time: "<<t<<" ns"<<endl;
+
+		alphaSumT+=t;
+		alphaSumTSquared+=t*t;
+
+		if (verboseOut)
+		{
+			(*verboseOut)  << format("%9.4f  %9.4f  %9.4f  %9.4f %9.4f") %x_f%y_f%z_f% theta%t<<endl;		
+		}
+
 		numAlphaTracks++;
 		//reset track status
 		validTrack=false;
@@ -146,18 +169,20 @@ void NeutrinoSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void NeutrinoSimTrackingAction::GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta)
+void NeutrinoSimTrackingAction::GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta, G4double& alphaMeanT, G4double& alphaSigmaT)
 {
 	if (numAlphaTracks)
 	{
 		alphaMeanX=alphaSumX/numAlphaTracks;
 		alphaMeanY=alphaSumY/numAlphaTracks;
 		alphaMeanZ=alphaSumZ/numAlphaTracks;
+		alphaMeanT=alphaSumT/numAlphaTracks;
 		recMeanTheta=recSumTheta/numAlphaTracks;
 
 		alphaSigmaX=sqrt(alphaSumXSquared/numAlphaTracks-alphaMeanX*alphaMeanX);
 		alphaSigmaY=sqrt(alphaSumYSquared/numAlphaTracks-alphaMeanY*alphaMeanY);
 		alphaSigmaZ=sqrt(alphaSumZSquared/numAlphaTracks-alphaMeanZ*alphaMeanZ);
+		alphaSigmaT=sqrt(alphaSumTSquared/numAlphaTracks-alphaMeanT*alphaMeanT);
 		recSigmaTheta=sqrt(recSumThetaSquared/numAlphaTracks-recMeanTheta*recMeanTheta);		
 	}
 }

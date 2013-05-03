@@ -46,7 +46,7 @@ class NeutrinoSimTrackingAction : public G4UserTrackingAction
   public:
     NeutrinoSimTrackingAction(ofstream* s_verboseOut, G4double s_verticalResolution, bool s_outputRealistic);
     virtual ~NeutrinoSimTrackingAction();
-	void GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta);
+	void GetStatistics(G4int& numTracks, G4double& alphaMeanX, G4double& alphaSigmaX, G4double& alphaMeanY, G4double& alphaSigmaY, G4double& alphaMeanZ, G4double& alphaSigmaZ, G4double& recMeanTheta, G4double& recSigmaTheta, G4double& alphaMeanT, G4double& alphaSigmaT);
 	virtual void PreUserTrackingAction(const G4Track*);    
 	virtual void PostUserTrackingAction(const G4Track*);
 private:
@@ -57,6 +57,8 @@ private:
 	G4double alphaSumX, alphaSumXSquared, alphaSumY, alphaSumYSquared, alphaSumZ, alphaSumZSquared;
 	//reconstructions
 	G4double recSumTheta, recSumThetaSquared;
+	//timing
+	G4double alphaSumT, alphaSumTSquared;
 	G4int  numAlphaTracks;
 	G4double verticalResolution;
 	

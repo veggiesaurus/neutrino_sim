@@ -62,6 +62,7 @@ bool parseVariables(int argc, char* argv[])
 			("outputStatisticsFile", po::value<string>(&outputStatisticsFile)->default_value(""), "set output file for statistics output")
 			("appendStats", "append statistics output instead of overwriting")			
 			("appendVerbose", "append verbose output instead of overwriting")
+			("ui", "load ui")
 			("outputRealistic", "output realistic reconstructions, taking into account finite resolution of detectors")
 			;
 
@@ -71,7 +72,7 @@ bool parseVariables(int argc, char* argv[])
 		appendStats=vm.count("appendStats");		
 		appendVerbose=vm.count("appendVerbose");		
 		outputRealistic=vm.count("outputRealistic");		
-
+		vis=vm.count("ui")?1:0;
 
 		if (vm.count("help")) {
 			cout << desc << "\n";
@@ -145,7 +146,7 @@ int main(int argc,char** argv)
 
 	// Initialize G4 kernel
 	//
-	vis=0;
+	//vis=0;
 	runManager->Initialize();
 	if (vis>1)
 	{
@@ -172,21 +173,21 @@ int main(int argc,char** argv)
 	runManager->BeamOn(numberOfEvents);
 
 	G4int numTracks;
-	G4double alphaMeanX, alphaSigmaX, alphaMeanY, alphaSigmaY, alphaMeanZ, alphaSigmaZ, recMeanTheta, recSigmaTheta;
-	tracking_action->GetStatistics(numTracks, alphaMeanX, alphaSigmaX, alphaMeanY, alphaSigmaY, alphaMeanZ, alphaSigmaZ, recMeanTheta, recSigmaTheta);
+	G4double alphaMeanX, alphaSigmaX, alphaMeanY, alphaSigmaY, alphaMeanZ, alphaSigmaZ, recMeanTheta, recSigmaTheta, alphaMeanT, alphaSigmaT;
+	tracking_action->GetStatistics(numTracks, alphaMeanX, alphaSigmaX, alphaMeanY, alphaSigmaY, alphaMeanZ, alphaSigmaZ, recMeanTheta, recSigmaTheta, alphaMeanT, alphaSigmaT);
 	G4cout <<"======================================================================"<<G4endl;
 	G4cout<<"Statistical output"<<endl;
 	G4cout <<"======================================================================"<<G4endl;
-	G4cout  << format("%4s  %5s  %9s  %9s  %9s  %9s  %9s  %9s  %9s  %9s") % "E" % "boron" % "mu_x" % "s_x" % "mu_y" % "s_y" % "mu_z" % "s_z" % "mu_theta" % "s_theta" <<endl;					
-	G4cout  << format("%4.1f  %5.1f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f") %neutronEnergy%boronLoading%alphaMeanX%alphaSigmaX%alphaMeanY%alphaSigmaY%alphaMeanZ%alphaSigmaZ%recMeanTheta%recSigmaTheta<<endl;			
+	G4cout  << format("%4s  %5s  %9s  %9s  %9s  %9s  %9s  %9s  %9s  %9s %9s %9s") % "E" % "boron" % "mu_x" % "s_x" % "mu_y" % "s_y" % "mu_z" % "s_z" % "mu_theta" % "s_theta" % "mu_t" % "s_t"<<endl;					
+	G4cout  << format("%4.1f  %5.1f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f %9.4f  %9.4f") %neutronEnergy%boronLoading%alphaMeanX%alphaSigmaX%alphaMeanY%alphaSigmaY%alphaMeanZ%alphaSigmaZ%recMeanTheta%recSigmaTheta%alphaMeanT%alphaSigmaT<<endl;			
 
 	ofstream* statsOut=NULL;
 	if (!outputStatisticsFile.empty())
 	{
 		statsOut=new ofstream(outputStatisticsFile.c_str(), ios::out | (appendStats?ios::app:ios::trunc));   
 		if (!appendStats)
-			(*statsOut)  << format("%4s  %5s  %9s  %9s  %9s  %9s  %9s  %9s  %9s  %9s") % "E" % "boron" % "mu_x" % "s_x" % "mu_y" % "s_y" % "mu_z" % "s_z" % "mu_theta" % "s_theta" <<endl;					
-		(*statsOut)  << format("%4.1f  %5.1f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f") %neutronEnergy%boronLoading%alphaMeanX%alphaSigmaX%alphaMeanY%alphaSigmaY%alphaMeanZ%alphaSigmaZ%recMeanTheta%recSigmaTheta<<endl;			
+			(*statsOut)  << format("%4s  %5s  %9s  %9s  %9s  %9s  %9s  %9s  %9s  %9s %9s %9s") % "E" % "boron" % "mu_x" % "s_x" % "mu_y" % "s_y" % "mu_z" % "s_z" % "mu_theta" % "s_theta" % "mu_t" % "s_t"<<endl;					
+		(*statsOut)  << format("%4.1f  %5.1f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f  %9.4f %9.4f  %9.4f") %neutronEnergy%boronLoading%alphaMeanX%alphaSigmaX%alphaMeanY%alphaSigmaY%alphaMeanZ%alphaSigmaZ%recMeanTheta%recSigmaTheta%alphaMeanT%alphaSigmaT<<endl;			
 		statsOut->close();
 	} 
 	if (verboseOut)
