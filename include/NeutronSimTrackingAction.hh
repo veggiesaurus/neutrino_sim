@@ -50,6 +50,7 @@ class NeutronSimTrackingAction : public G4UserTrackingAction
 	virtual void PreUserTrackingAction(const G4Track*);    
 	virtual void PostUserTrackingAction(const G4Track*);
 private:
+
 	//neutron initial positions
 	G4ThreeVector latestNeutronStartPosition;
 	G4ThreeVector latestNeutronStartVolumePosition;

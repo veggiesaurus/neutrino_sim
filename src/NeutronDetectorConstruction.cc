@@ -105,9 +105,9 @@ G4VPhysicalVolume* NeutronDetectorConstruction::Construct()
   //------------------------------ experimental hall (world volume)
   //------------------------------ beam line along x axis
 
-  G4double expHall_x = 1.0*m;
-  G4double expHall_y = 0.6*m;
-  G4double expHall_z = 0.6*m;
+  G4double expHall_x = 2.0*m;
+  G4double expHall_y = 1.6*m;
+  G4double expHall_z = 1.6*m;
   G4Box* experimentalHall_box
     = new G4Box("expHall_box",expHall_x,expHall_y,expHall_z);
   experimentalHall_log = new G4LogicalVolume(experimentalHall_box,

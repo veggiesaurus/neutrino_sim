@@ -68,14 +68,18 @@
     <ClCompile Include="src\NeutronDetectorConstruction.cc" />
     <ClCompile Include="src\NeutronDetectorMessenger.cc" />
     <ClCompile Include="src\NeutronSimEventAction.cc" />
+    <ClCompile Include="src\NeutronSimHit.cc" />
     <ClCompile Include="src\NeutronSimPhysicsList.cc" />
     <ClCompile Include="src\NeutronPrimaryGeneratorAction.cc" />
+    <ClCompile Include="src\NeutronSimSD.cc" />
     <ClCompile Include="src\NeutronSimTrackingAction.cc" />
     <ClCompile Include="stats.cc" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\NeutronDetectorMessenger.hh" />
     <None Include="include\NeutronSimEventAction.hh" />
+    <None Include="include\NeutronSimHit.hh" />
+    <None Include="include\NeutronSimSD.hh" />
     <None Include="include\NeutronSimTrackingAction.hh" />
     <None Include="include\NeutronDetectorConstruction.hh" />
     <None Include="include\NeutronSimPhysicsList.hh" />

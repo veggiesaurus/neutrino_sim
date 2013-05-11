@@ -29,7 +29,6 @@ bool outputRealistic;
 
 //incident particles
 G4double neutronEnergy, neutronEnergySpread; 
-G4double positronEnergy, positronEnergySpread;
 G4double incidentAngle;
 //detector material
 G4double boronLoading, boronEnrichment;
@@ -47,22 +46,21 @@ bool parseVariables(int argc, char* argv[])
 		desc.add_options()
 			("help", "produce help message")
 			("numberOfEvents", po::value<G4int>(&numberOfEvents)->default_value(25000), "set number of events")
-			("neutronEnergy", po::value<G4double>(&neutronEnergy)->default_value(60), "set incident neutron energy (in keV)")
+			("neutronEnergy", po::value<G4double>(&neutronEnergy)->default_value(1000), "set incident neutron energy (in keV)")
 			("neutronEnergySpread", po::value<G4double>(&neutronEnergySpread)->default_value(0), "set incident neutron energy spread (in keV)")
-			("positronEnergy", po::value<G4double>(&positronEnergy)->default_value(10), "set incident positron energy (in keV)")
-			("positronEnergySpread", po::value<G4double>(&positronEnergySpread)->default_value(0), "set incident positron energy spread (in keV)")
 			("incidentAngle", po::value<G4double>(&incidentAngle)->default_value(0), "set incident neutron angle in the x-y plane (in degrees. 0: along y axis; 90: along +ve x axis)")
 			("boronLoading", po::value<G4double>(&boronLoading)->default_value(5), "set percentage of boron in scintillator (0-100)")
 			("boronEnrichment", po::value<G4double>(&boronEnrichment)->default_value(19.89f), "set percentage of B-10 enrichment of boron (0: All B-11; 100: All B-10)")
 			("hexRadius", po::value<G4double>(&hexRadius)->default_value(25), "set radius of hexagonal scintillator cell (in mm)")
 			("hexLength", po::value<G4double>(&hexLength)->default_value(300), "set length of hexagonal scintillator cell (in mm)")
-			("edgeCells", po::value<G4int>(&edgeCells)->default_value(3), "set number of hexagonal cells along each edge ")
+			("edgeCells", po::value<G4int>(&edgeCells)->default_value(4), "set number of hexagonal cells along each edge ")
 			("verticalResolution", po::value<G4double>(&verticalResolution)->default_value(21), "set sigma of vertical measurements (in mm)")
 			("outputVerboseFile", po::value<string>(&outputVerboseFile)->default_value(""), "set output file for each neutron capture position output")
 			("outputStatisticsFile", po::value<string>(&outputStatisticsFile)->default_value(""), "set output file for statistics output")
 			("appendStats", "append statistics output instead of overwriting")			
 			("appendVerbose", "append verbose output instead of overwriting")
 			("ui", "load ui")
+			("vis", po::value<G4int>(&vis)->default_value(0), "load vis")
 			("outputRealistic", "output realistic reconstructions, taking into account finite resolution of detectors")
 			;
 
@@ -72,7 +70,7 @@ bool parseVariables(int argc, char* argv[])
 		appendStats=vm.count("appendStats");		
 		appendVerbose=vm.count("appendVerbose");		
 		outputRealistic=vm.count("outputRealistic");		
-		vis=vm.count("ui")?1:0;
+		//vis=vm.count("ui")?1:0;
 
 		if (vm.count("help")) {
 			cout << desc << "\n";
@@ -81,7 +79,6 @@ bool parseVariables(int argc, char* argv[])
 
 		cout << "number of events was set to " << numberOfEvents << ".\n";
 		cout << "neutron energy was set to " << neutronEnergy << " +- "<<neutronEnergySpread<<" keV.\n";        
-		cout << "positron energy was set to " << positronEnergy << " +- "<<positronEnergySpread<<" keV.\n";
 		cout << "boron loading was set to " << boronLoading << " %.\n";
 		cout << "boron enrichment was set to " << boronEnrichment << " %.\n";
 		cout << "hexagonal scintillator cell radius was set to " << hexRadius << " mm.\n";
@@ -137,7 +134,7 @@ int main(int argc,char** argv)
 
 	// set mandatory user action class
 	//
-	G4VUserPrimaryGeneratorAction* gen_action = new NeutronPrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, positronEnergy, positronEnergySpread, incidentAngle);
+	G4VUserPrimaryGeneratorAction* gen_action = new NeutronPrimaryGeneratorAction(neutronEnergy, neutronEnergySpread, incidentAngle);
 	runManager->SetUserAction(gen_action);
 	NeutronSimEventAction* event_action=new NeutronSimEventAction();
 	runManager->SetUserAction(event_action);
@@ -165,7 +162,7 @@ int main(int argc,char** argv)
 
 	UI->ApplyCommand("/run/verbose 0");
 	UI->ApplyCommand("/event/verbose 0");
-	UI->ApplyCommand("/tracking/verbose 0");
+	UI->ApplyCommand("/tracking/verbose 1");
 	if (vis>1)
 		UI->ApplyCommand("/control/execute vis.mac"); 
 	//UI->ApplyCommand("/Neutron/det/stepMax 1.0 mm"); 

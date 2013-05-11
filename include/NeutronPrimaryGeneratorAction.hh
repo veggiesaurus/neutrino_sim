@@ -41,17 +41,15 @@ class NeutronPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     NeutronPrimaryGeneratorAction();
-    NeutronPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_positronEnergy, G4double s_positronEnergySpread, G4double s_incidentAngle);
+    NeutronPrimaryGeneratorAction(G4double s_neutronEnergy, G4double s_neutronEnergySpread, G4double s_incidentAngle);
     ~NeutronPrimaryGeneratorAction();
 
   public:
     void GeneratePrimaries(G4Event* anEvent);
 
   private:
-    G4ParticleGun* particleGunThermalNeutron;
+    G4ParticleGun* particleGunNeutron;
     G4double neutronEnergy, neutronEnergySpread;
-    G4ParticleGun* particleGunPositron;
-    G4double positronEnergy, positronEnergySpread;
 	G4double incidentAngle;
 };
 

@@ -29,8 +29,12 @@
 /// \brief Implementation of the NeutronSimTrackingAction class
 
 #include "NeutronSimTrackingAction.hh"
+#include "NeutronSimHit.hh"
 
 #include "G4Event.hh"
+#include "G4Color.hh"
+#include "G4Circle.hh"
+#include "G4VisAttributes.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
@@ -68,6 +72,9 @@ NeutronSimTrackingAction::~NeutronSimTrackingAction()
 
 void NeutronSimTrackingAction::PreUserTrackingAction(const G4Track* track)
 {
+	NeutronSimHit* scintHit=new NeutronSimHit();
+	scintHit->SetEdep(track->GetKineticEnergy());
+	scintHit->SetPos(track->GetVertexPosition());
 	//primary neutron
 	if (track->GetParticleDefinition()==G4Neutron::Neutron() && track->GetParentID()==0)
 	{
@@ -84,8 +91,8 @@ void NeutronSimTrackingAction::PreUserTrackingAction(const G4Track* track)
 			//G4cout<<"Rejected: "<<track->GetVolume()->GetName()<<G4endl;
 			//abandon track if it starts outside the detector
 			validTrack=false;
-			G4UImanager * UImanager = G4UImanager::GetUIpointer();
-			UImanager->ApplyCommand("/event/abort");
+			//G4UImanager * UImanager = G4UImanager::GetUIpointer();
+			//UImanager->ApplyCommand("/event/abort");
 		}
 		//G4cout<<"Initial Position: "<<latestNeutronStartPosition<<endl;
 		//G4cout<<"Initial Volume: "<<track->GetVolume()->GetName()<<": "<<track->GetVolume()->GetTranslation().x()<<endl;
@@ -101,12 +108,17 @@ void NeutronSimTrackingAction::PreUserTrackingAction(const G4Track* track)
 		//	validTrack=false;
 		//G4cout<<"Start time: "<<t<<" ns"<<endl;
 	}
+	G4double t=track->GetGlobalTime();
+	G4cout<<"Start time: "<<t<<" ns"<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void NeutronSimTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
+	
+	G4double t=track->GetGlobalTime();
+	G4cout<<"Start time: "<<t<<" ns"<<endl;
 	bool neutronFromCenterCell=(abs(latestNeutronStartVolumePosition.x())<0.001 && abs(latestNeutronStartVolumePosition.y()<0.001));
 	//alpha particle originating from primary neutron, validTrack means the neutron came from inside the detector volume
 	if (track->GetParticleDefinition()==G4Alpha::Alpha() && track->GetParentID()==1 && validTrack)

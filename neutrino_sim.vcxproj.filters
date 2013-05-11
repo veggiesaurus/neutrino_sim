@@ -35,6 +35,12 @@
     <ClCompile Include="src\NeutronSimTrackingAction.cc">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\NeutronSimHit.cc">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\NeutronSimSD.cc">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="simulate.sh" />
@@ -60,6 +66,12 @@
       <Filter>include</Filter>
     </None>
     <None Include="include\NeutronSimTrackingAction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronSimHit.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronSimSD.hh">
       <Filter>include</Filter>
     </None>
   </ItemGroup>

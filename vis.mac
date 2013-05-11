@@ -31,7 +31,10 @@
 /vis/drawVolume
 #
 # Specify view angle:
-/vis/viewer/set/viewpointThetaPhi 45. 90.
+#isometric
+#/vis/viewer/set/viewpointThetaPhi 45. 90.
+#side-on
+/vis/viewer/set/viewpointThetaPhi 0. 90.
 #
 # Specify zoom value:
 /vis/viewer/zoom 1.5
@@ -47,16 +50,16 @@
 /vis/scene/add/trajectories rich smooth
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 0
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
-#/vis/scene/add/hits
+/vis/scene/add/hits
 #
 
 /vis/filtering/trajectories/create/particleFilter
+/vis/filtering/trajectories/particleFilter-0/add proton
 /vis/filtering/trajectories/particleFilter-0/add neutron
-/vis/filtering/trajectories/particleFilter-0/add alpha
 #/vis/filtering/trajectories/particleFilter-0/add e+
 #
 # To invert the above, drawing all particles except gammas,
