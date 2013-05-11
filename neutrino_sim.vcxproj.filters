@@ -14,25 +14,25 @@
     <ClCompile Include="stats.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="neutrino.cc">
+    <ClCompile Include="neutron.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoDetectorConstruction.cc">
+    <ClCompile Include="src\NeutronDetectorConstruction.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoPrimaryGeneratorAction.cc">
+    <ClCompile Include="src\NeutronDetectorMessenger.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoSimPhysicsList.cc">
+    <ClCompile Include="src\NeutronPrimaryGeneratorAction.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoDetectorMessenger.cc">
+    <ClCompile Include="src\NeutronSimEventAction.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoSimEventAction.cc">
+    <ClCompile Include="src\NeutronSimPhysicsList.cc">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\NeutrinoSimTrackingAction.cc">
+    <ClCompile Include="src\NeutronSimTrackingAction.cc">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -40,28 +40,28 @@
     <None Include="simulate.sh" />
     <None Include="statProcess.sh" />
     <None Include="README" />
-    <None Include="neutrino.in" />
-    <None Include="include\NeutrinoDetectorConstruction.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\NeutrinoPrimaryGeneratorAction.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\NeutrinoSimPhysicsList.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="neutrino.err" />
-    <None Include="neutrino.out" />
-    <None Include="include\NeutrinoDetectorMessenger.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\NeutrinoSimEventAction.hh">
-      <Filter>include</Filter>
-    </None>
-    <None Include="include\NeutrinoSimTrackingAction.hh">
-      <Filter>include</Filter>
-    </None>
     <None Include="vis.mac" />
+    <None Include="neutron.err" />
+    <None Include="neutron.in" />
+    <None Include="neutron.out" />
+    <None Include="include\NeutronDetectorConstruction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronDetectorMessenger.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronPrimaryGeneratorAction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronSimEventAction.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronSimPhysicsList.hh">
+      <Filter>include</Filter>
+    </None>
+    <None Include="include\NeutronSimTrackingAction.hh">
+      <Filter>include</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CMakeLists.txt" />

@@ -15,7 +15,7 @@ one event. This example demonstrates how the basic GEANT4 framework works.
 
 1. Detector description
 
- The detector is defined in NeutrinoDetectorConstruction.cc. Argon gas,
+ The detector is defined in NeutronDetectorConstruction.cc. Argon gas,
 aluminum and lead are defined first, where all of them are single element
 materials. Though materials are assigned for each volume, they will not
 affect the trajectory of a geantino.
@@ -27,14 +27,14 @@ block made of lead and it has 19 layers of aluminum plates inside.
 
 2. Physics processes
 
- NeutrinoSimPhysicsList.cc defines only a geantino and a transportation
+ NeutronSimPhysicsList.cc defines only a geantino and a transportation
 process. Though cutoff will not be applied onto geantino, a dummy
 value must be set.
 
 3. Event generation
 
  G4ParticleGun is instanciated in the constructor of 
-NeutrinoPrimaryGeneratorAction class. At the every event, the public
+NeutronPrimaryGeneratorAction class. At the every event, the public
 method GeneratePrimaries(G4Event*) is invoked. In this method,
 G4ParticleGun is accessed to generate a primary particle (geantino).
  Please note that the direction of the primary particle is set

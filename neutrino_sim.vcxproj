@@ -64,25 +64,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="neutrino.cc" />
-    <ClCompile Include="src\NeutrinoDetectorConstruction.cc" />
-    <ClCompile Include="src\NeutrinoDetectorMessenger.cc" />
-    <ClCompile Include="src\NeutrinoSimEventAction.cc" />
-    <ClCompile Include="src\NeutrinoSimPhysicsList.cc" />
-    <ClCompile Include="src\NeutrinoPrimaryGeneratorAction.cc" />
-    <ClCompile Include="src\NeutrinoSimTrackingAction.cc" />
+    <ClCompile Include="neutron.cc" />
+    <ClCompile Include="src\NeutronDetectorConstruction.cc" />
+    <ClCompile Include="src\NeutronDetectorMessenger.cc" />
+    <ClCompile Include="src\NeutronSimEventAction.cc" />
+    <ClCompile Include="src\NeutronSimPhysicsList.cc" />
+    <ClCompile Include="src\NeutronPrimaryGeneratorAction.cc" />
+    <ClCompile Include="src\NeutronSimTrackingAction.cc" />
     <ClCompile Include="stats.cc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="include\NeutrinoDetectorMessenger.hh" />
-    <None Include="include\NeutrinoSimEventAction.hh" />
-    <None Include="include\NeutrinoSimTrackingAction.hh" />
-    <None Include="neutrino.err" />
-    <None Include="neutrino.out" />
-    <None Include="neutrino.in" />
-    <None Include="include\NeutrinoDetectorConstruction.hh" />
-    <None Include="include\NeutrinoSimPhysicsList.hh" />
-    <None Include="include\NeutrinoPrimaryGeneratorAction.hh" />
+    <None Include="include\NeutronDetectorMessenger.hh" />
+    <None Include="include\NeutronSimEventAction.hh" />
+    <None Include="include\NeutronSimTrackingAction.hh" />
+    <None Include="include\NeutronDetectorConstruction.hh" />
+    <None Include="include\NeutronSimPhysicsList.hh" />
+    <None Include="include\NeutronPrimaryGeneratorAction.hh" />
+    <None Include="neutron.err" />
+    <None Include="neutron.in" />
+    <None Include="neutron.out" />
     <None Include="README" />
     <None Include="simulate.sh" />
     <None Include="statProcess.sh" />

@@ -1,7 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(neutrinosim)
+project(neutronsim)
 
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_BUILD_TYPE Release)
@@ -41,17 +41,17 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(neutrino neutrino.cc ${sources} ${headers})
-target_link_libraries(neutrino ${Boost_LIBRARIES})                                                                                                                                                                                                                            
-target_link_libraries(neutrino ${Geant4_LIBRARIES} )
-TARGET_LINK_LIBRARIES( neutrino ${Boost_LIBRARIES} )
+add_executable(neutron neutron.cc ${sources} ${headers})
+target_link_libraries(neutron ${Boost_LIBRARIES})                                                                                                                                                                                                                            
+target_link_libraries(neutron ${Geant4_LIBRARIES} )
+TARGET_LINK_LIBRARIES( neutron ${Boost_LIBRARIES} )
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build N01. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
 set(N01_SCRIPTS
-    neutrino.in neutrino.out vis.mac
+    neutron.in neutron.out vis.mac
   )
 
 foreach(_script ${N01_SCRIPTS})
@@ -66,11 +66,11 @@ endforeach()
 # Add program to the project targets
 # (this avoids the need of typing the program name after make)
 #
-add_custom_target(neutrinosim DEPENDS neutrino)
+add_custom_target(neutronsim DEPENDS neutron)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS neutrino DESTINATION bin)
+install(TARGETS neutron DESTINATION bin)
 
 set(CMAKE_BUILD_TYPE Release)

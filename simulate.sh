@@ -16,8 +16,8 @@ STATS_OUTPUT=statsOut.txt
 EDGE_CELLS=3
 
 #for debugging
-#SIM_EXE="echo ./neutrino"
-SIM_EXE="./neutrino"
+#SIM_EXE="echo ./neutron"
+SIM_EXE="./Neutron"
 
 
 
